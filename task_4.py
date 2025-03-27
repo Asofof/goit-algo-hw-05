@@ -18,16 +18,12 @@ def parse_input(user_input):
 
 @input_error # додамо декоратор
 def add_contact(args, contacts):
-    if len(args) != 2:
-        raise ValueError # Если аргументов недостаточно вызывает исключение ValueError, и декоратор выводит "Give me name and phone please.".
     name, phone = args
     contacts[name] = phone
     return "Contact added."
 
 @input_error # додамо декоратор
 def change_contact(args, contacts):
-    if len(args) != 2:
-        raise ValueError
     name, phone = args
     if name in contacts:
         contacts[name] = phone
@@ -37,12 +33,9 @@ def change_contact(args, contacts):
 
 @input_error # додамо декоратор
 def show_phone(args, contacts):
-    if len(args) != 1:
-        raise ValueError 
     name = args[0]
     return contacts[name] # Если контакта нет, выбрасывает KeyError.
 
-@input_error # додамо декоратор
 def show_all(contacts):
     if not contacts:
         return "No contacts saved."
@@ -52,7 +45,10 @@ def main():
     contacts = {}
     print("Welcome to the assistant bot!")
     while True:
-        user_input = input("Enter a command: ")
+        user_input = input("Enter a command: ").strip()
+        if not user_input:  # Проверяем, введена ли пустая строка
+            print("Please enter a valid command.")
+            continue
         command, args = parse_input(user_input)
         if command in ["close", "exit"]:
             print("Good bye!")
